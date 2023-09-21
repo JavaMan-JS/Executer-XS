@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+  /* Define the styles for the draggable GUI */
+  #bookmarklet-container {
+    position: absolute;
+    background-color: #333;
+    color: white;
+    padding: 10px;
+    cursor: move;
+  }
+</style>
+</head>
+<body>
+
+<div id="bookmarklet-container">
+  <div style="text-align: right;">
+    <a href="#" id="close-button">X</a>
+  </div>
+  <textarea id="code-input" placeholder="Enter JavaScript code"></textarea><br>
+  <button id="execute-button">Execute</button>
+</div>
+
+<script>
+  // JavaScript for making the GUI draggable
+  var container = document.getElementById('bookmarklet-container');
+  var isDragging = false;
+  var offsetX, offsetY;
+
+  // Function to handle mouse down event
+  function handleMouseDown(e) {
+    isDragging = true;
+    offsetX = e.clientX - container.getBoundingClientRect().left;
+    offsetY = e.clientY - container.getBoundingClientRect().top;
+  }
+
+  // Function to handle mouse move event
+  function handleMouseMove(e) {
+    if (isDragging) {
+      container.style.left = (e.clientX - offsetX) + 'px';
+      container.style.top = (e.clientY - offsetY) + 'px';
+    }
+  }
+
+  // Function to handle mouse up event
+  function handleMouseUp() {
+    isDragging = false;
+  }
+
+  // Attach event listeners for dragging
+  container.addEventListener('mousedown', handleMouseDown);
+  document.addEventListener('mousemove', handleMouseMove);
+  document.addEventListener('mouseup', handleMouseUp);
+
+  // Function to execute JavaScript code
+  document.getElementById('execute-button').addEventListener('click', function() {
+    var code = document.getElementById('code-input').value;
+    try {
+      var result = eval(code);
+      if (result !== undefined) {
+        alert('Result: ' + result);
+      }
+    } catch (error) {
+      alert('Error: ' + error.message);
+    }
+  });
+
+  // Close the GUI
+  document.getElementById('close-button').addEventListener('click', function() {
+    container.style.display = 'none';
+  });
+
+</script>
+
+</body>
+</html>
